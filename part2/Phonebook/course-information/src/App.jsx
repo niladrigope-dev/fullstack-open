@@ -87,6 +87,8 @@ const App = () => {
             setNewNumber("")
           })
       }
+
+      return
     }
 
     const personObject = {
@@ -130,7 +132,7 @@ const App = () => {
       personService
         .deletePerson(id)
         .then(() => {
-          setPersons(prevpersons => prevpersons.filter(person => person.id != id))
+          setPersons(prevpersons => prevpersons.filter(person => person.id !== id))
         })
     }
   }
