@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
+import Notification from './components/Notification'
+
 
 const Filter = ({search,handleNewSearch}) => {
   return (
@@ -61,6 +63,8 @@ const App = () => {
 
   const [search, setSearch] = useState("")
 
+  const [notification, setNotification] = useState(null)
+
   const addPersons = (event) => {
     event.preventDefault()
     
@@ -85,6 +89,10 @@ const App = () => {
             )
             setNewName("")
             setNewNumber("")
+            setNotificationMessage(`${updatePerson.name}'s number updated successfully`,'success')
+          })
+          .catch(error => {
+            setNotificationMessage(`${existingPerson.name} was already removed from the server`, "error")
           })
       }
 
@@ -103,6 +111,7 @@ const App = () => {
         setPersons(prevPersons => prevPersons.concat(returnedPerson))
         setNewName("")
         setNewNumber("")
+        setNotificationMessage(`${returnedPerson.name} added successfully`,"success")
       })
   }
   
@@ -136,9 +145,22 @@ const App = () => {
         })
     }
   }
+
+  const setNotificationMessage = (message, type) => {
+    setNotification({
+      message,
+      type
+    })
+
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message = {notification?.message} type = {notification?.type}/>
       <Filter search = {search} handleNewSearch = {handleNewSearch}/>
       <h2>add a new</h2>
       <PersonForm
